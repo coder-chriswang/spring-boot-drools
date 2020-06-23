@@ -35,5 +35,25 @@ Drools规则引擎, 致力于让更多人快速上手
 
 链接：https://pan.baidu.com/s/1564yzRm-CffDIE2CevNy3Q
 提取码：kh5c
-
+  
+```java
+public static BaseModel execute(List<String> ruleList, BaseModel baseModel) {
+        if (CollectionUtils.isEmpty(ruleList) || baseModel == null) {
+            return baseModel;
+        }
+        log.info("执行规则引擎 start ....");
+        System.setProperty("drools.dateformat", "yyyy-MM-dd HH:mm:ss");
+        KieHelper helper = new KieHelper();
+        for (String rule : ruleList) {
+            helper.addContent(rule, ResourceType.DRL);
+        }
+        KieSession kSession = helper.build().newKieSession();
+        kSession.insert(baseModel);
+        kSession.fireAllRules();
+        kSession.dispose();
+        log.info("执行规则引擎 end ....");
+        return baseModel;
+    }
+}
+```  
 
